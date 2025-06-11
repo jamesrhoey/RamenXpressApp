@@ -28,7 +28,112 @@ const addInventory = async (req, res) => {
   }
 };
 
+// Update inventory quantity
+const updateInventoryQuantity = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { quantity } = req.body;
+
+    if (!quantity || quantity < 0) {
+      return res.status(400).json({ error: 'Invalid quantity value' });
+    }
+
+    const item = await Inventory.findById(id);
+    if (!item) {
+      return res.status(404).json({ error: 'Inventory item not found' });
+    }
+
+    item.stocks += quantity;
+    item.restocked = Date.now();
+    
+    // Update status based on new stock level
+    if (item.stocks <= 0) {
+      item.status = 'out of stock';
+    } else if (item.stocks < 10) {
+      item.status = 'low stock';
+    } else {
+      item.status = 'in stock';
+    }
+
+    const updatedItem = await item.save();
+    res.status(200).json(updatedItem);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update inventory quantity' });
+  }
+};
+
+// Delete inventory item
+const deleteInventory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const deletedItem = await Inventory.findByIdAndDelete(id);
+    if (!deletedItem) {
+      return res.status(404).json({ error: 'Inventory item not found' });
+    }
+    
+    res.status(200).json({ message: 'Inventory item deleted successfully', deletedItem });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete inventory item' });
+  }
+};
+
+// Edit inventory item
+const editInventory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, stocks, units, status } = req.body;
+
+    // Validate required fields
+    if (!name || !stocks || !units) {
+      return res.status(400).json({ error: 'Name, stocks, and units are required' });
+    }
+
+    // Validate stocks is a positive number
+    if (stocks < 0) {
+      return res.status(400).json({ error: 'Stocks cannot be negative' });
+    }
+
+    // Validate status if provided
+    if (status && !['in stock', 'low stock', 'out of stock'].includes(status)) {
+      return res.status(400).json({ error: 'Invalid status value' });
+    }
+
+    const item = await Inventory.findById(id);
+    if (!item) {
+      return res.status(404).json({ error: 'Inventory item not found' });
+    }
+
+    // Update fields
+    item.name = name;
+    item.stocks = stocks;
+    item.units = units;
+    item.restocked = Date.now();
+    
+    // Update status based on stock level if not explicitly provided
+    if (!status) {
+      if (stocks <= 0) {
+        item.status = 'out of stock';
+      } else if (stocks < 10) {
+        item.status = 'low stock';
+      } else {
+        item.status = 'in stock';
+      }
+    } else {
+      item.status = status;
+    }
+
+    const updatedItem = await item.save();
+    res.status(200).json(updatedItem);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update inventory item' });
+  }
+};
+
 module.exports = {
   getInventory,
-  addInventory
+  addInventory,
+  updateInventoryQuantity,
+  deleteInventory,
+  editInventory
 };

@@ -10,6 +10,11 @@ const MenuSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  category: {
+    type: String,
+    enum: ['ramen', 'rice bowls', 'side dishes', 'sushi', 'party trays', 'add-ons', 'drinks'],
+    required: true
+  },
   ingredients: [
     {
       inventoryItem: {
@@ -23,15 +28,5 @@ const MenuSchema = new mongoose.Schema({
     }
   ]
 });
-
-// Static method to get all menu items
-MenuSchema.statics.getAllMenus = async function() {
-  try {
-    const menus = await this.find().sort({ name: 1 });
-    return menus;
-  } catch (error) {
-    throw error;
-  }
-};
 
 module.exports = mongoose.model('Menu', MenuSchema); 

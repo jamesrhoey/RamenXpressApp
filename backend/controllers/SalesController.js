@@ -5,7 +5,22 @@ const Sales = require('../models/Sales');
 // Place an order with multiple items
 const placeOrder = async (req, res) => {
   try {
-    const { items } = req.body;
+    const { items, orderType, paymentMethod } = req.body;
+
+    // Validate order type
+    if (!orderType || !['takeout', 'dine-in'].includes(orderType)) {
+      return res.status(400).json({ 
+        message: 'Invalid order type. Must be either "takeout" or "dine-in"' 
+      });
+    }
+
+    // Validate payment method
+    if (!paymentMethod || !['gcash', 'paymaya', 'cash'].includes(paymentMethod)) {
+      return res.status(400).json({ 
+        message: 'Invalid payment method. Must be either "gcash", "paymaya", or "cash"' 
+      });
+    }
+
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ message: 'Invalid order items' });
     }
@@ -71,7 +86,10 @@ const placeOrder = async (req, res) => {
     const sale = new Sales({
       orderId,
       items: orderItems,
-      total: totalAmount
+      total: totalAmount,
+      orderType,
+      paymentMethod,
+      orderDate: new Date()
     });
 
     await sale.save();
@@ -81,7 +99,10 @@ const placeOrder = async (req, res) => {
       orderDetails: {
         orderId,
         items: orderItems,
-        total: totalAmount
+        total: totalAmount,
+        orderType,
+        paymentMethod,
+        orderDate: sale.orderDate
       }
     });
 

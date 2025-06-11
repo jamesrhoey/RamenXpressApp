@@ -10,6 +10,8 @@ const MONGO_URI = process.env.MONGO_URI;
 const InventoryRoutes = require('./routes/InventoryRoutes');
 const MenuRoutes = require('./routes/MenuRoutes');
 const SalesRoutes = require('./routes/SalesRoutes');
+const AuthRoutes = require('./routes/AuthRoutes');
+const { verifyToken, isAdmin, isCashier } = require('./middleware/AuthMiddleware');
 
 const app = express();
 
@@ -19,10 +21,10 @@ app.use(cookieParser());
 
 const mapper = '/api/v1';
 
-//app.use(mapper + '/auth',;
-app.use(mapper + '/inventory', InventoryRoutes);
-app.use(mapper + '/menu', MenuRoutes);
-app.use(mapper + '/sales', SalesRoutes);
+app.use(mapper + '/auth', AuthRoutes);
+app.use(mapper + '/inventory', verifyToken, isAdmin, InventoryRoutes);
+app.use(mapper + '/menu', verifyToken, isCashier, MenuRoutes);
+app.use(mapper + '/sales', verifyToken, isAdmin, SalesRoutes);
 
 
 

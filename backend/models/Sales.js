@@ -28,6 +28,16 @@ const SalesSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  orderType: {
+    type: String,
+    enum: ['takeout', 'dine-in'],
+    required: true
+  },
+  paymentMethod: {
+    type: String,
+    enum: ['gcash', 'paymaya', 'cash'],
+    required: true
+  },
   orderDate: {
     type: Date,
     default: Date.now
