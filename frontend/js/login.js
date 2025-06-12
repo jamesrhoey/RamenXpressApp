@@ -19,6 +19,10 @@ function handleLogin(event) {
         return false;
     }
     // If cashier, do nothing for now
+    if (role === 'cashier') {
+        window.location.href = './html/POS.html';
+        return false;
+    }
     return false;
 }
 
