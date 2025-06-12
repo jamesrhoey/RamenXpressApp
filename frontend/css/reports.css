@@ -1,0 +1,33 @@
+.badge-dinein { background: #0d6efd; }
+.badge-pickup { background: #0dcaf0; }
+.badge-delivery { background: #198754; }
+.table thead th { cursor: pointer; }
+.summary-card span { font-size: 0.95rem; }
+.summary-card .stat { font-size: 1.5rem; font-weight: bold; }
+.summary-card .desc { font-size: 0.9rem; color: #6c757d; }
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100vh;
+    transition: 0.3s;
+    z-index: 1040;
+    width: 250px !important;
+    min-width: 250px !important;
+    max-width: 250px !important;
+  }
+  .sidebar.show {
+    left: 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  }
+  .main-content {
+    margin-left: 0 !important;
+    width: 100%;
+  }
+  .navbar-brand img, .navbar img {
+    height: 30px !important;
+    width: 30px !important;
+  }
+}

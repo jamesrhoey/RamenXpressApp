@@ -1,0 +1,35 @@
+@media (max-width: 768px) {
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      height: 100vh;
+      transition: 0.3s;
+      z-index: 1040;
+    }
+    .sidebar.show {
+      left: 0;
+    }
+    .main-content {
+      margin-left: 0 !important;
+      width: 100%;
+    }
+  }
+.status-in-stock { 
+    color: #198754;
+}
+.status-low-stock { 
+    color: #ffc107;
+}
+.status-out-of-stock {
+    color: #dc3545;
+}
+.btn-icon {
+    padding: 0.25rem;
+}
+.table-responsive {
+    min-height: 400px;
+}
+.table-responsive {
+    min-height: 400px;
+}
