@@ -10,6 +10,7 @@ import 'edit_payment_method_page.dart';
 import 'invoice_page.dart';
 import 'package:uuid/uuid.dart';
 import 'providers/order_history_provider.dart';
+import 'providers/profile_provider.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key});
@@ -74,7 +75,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       const Text(
                         'Your Cart',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Color(0xFF1A1A1A),
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
@@ -104,7 +105,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: Color(0xFF1A1A1A),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -112,7 +113,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     'Looks like you haven\'t added anything to your cart yet',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey[600],
+                      color: Color(0xFF1A1A1A),
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -124,7 +125,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         Navigator.pushReplacementNamed(context, '/home');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.deepOrange,
+                        backgroundColor: Color(0xFFD32D43),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -140,6 +141,7 @@ class _PaymentPageState extends State<PaymentPage> {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
+                              color: Color(0xFF1A1A1A),
                             ),
                           ),
                         ],
@@ -156,7 +158,7 @@ class _PaymentPageState extends State<PaymentPage> {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withValues(red: 128, green: 128, blue: 128, alpha: 51),
+                color: Colors.grey.withOpacity(0.1),
                 spreadRadius: 1,
                 blurRadius: 10,
                 offset: const Offset(0, -1),
@@ -187,8 +189,8 @@ class _PaymentPageState extends State<PaymentPage> {
               BottomNavigationBarItem(icon: Icon(Icons.history), label: ''),
               BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
             ],
-            selectedItemColor: Colors.deepOrange,
-            unselectedItemColor: Colors.grey,
+            selectedItemColor: Color(0xFFD32D43),
+            unselectedItemColor: Color(0xFF1A1A1A),
             showSelectedLabels: false,
             showUnselectedLabels: false,
             backgroundColor: Colors.white,
@@ -215,7 +217,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     const Text(
                       'Your Cart',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Color(0xFF1A1A1A),
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -624,7 +626,7 @@ class _PaymentPageState extends State<PaymentPage> {
                               _showConfirmationDialog(context);
                             },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.deepOrange,
+                        backgroundColor: Color(0xFFD32D43),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -635,6 +637,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          color: Color(0xFF1A1A1A),
                         ),
                       ),
                     ),
@@ -682,8 +685,8 @@ class _PaymentPageState extends State<PaymentPage> {
             BottomNavigationBarItem(icon: Icon(Icons.history), label: ''),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
           ],
-          selectedItemColor: Colors.deepOrange,
-          unselectedItemColor: Colors.grey,
+          selectedItemColor: Color(0xFFD32D43),
+          unselectedItemColor: Color(0xFF1A1A1A),
           showSelectedLabels: false,
           showUnselectedLabels: false,
           backgroundColor: Colors.white,
@@ -741,7 +744,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 Text(
                   '₱${price.toStringAsFixed(2)}',
                   style: TextStyle(
-                    color: Colors.grey[600],
+                    color: Color(0xFF1A1A1A),
                     fontSize: 14,
                   ),
                 ),
@@ -752,7 +755,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     IconButton(
                       onPressed: onDecrease,
                       icon: const Icon(Icons.remove_circle_outline),
-                      color: Colors.grey,
+                      color: Color(0xFF1A1A1A),
                       iconSize: 20,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
@@ -769,7 +772,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     IconButton(
                       onPressed: onIncrease,
                       icon: const Icon(Icons.add_circle_outline),
-                      color: Colors.deepOrange,
+                      color: Color(0xFFD32D43),
                       iconSize: 20,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
@@ -782,7 +785,7 @@ class _PaymentPageState extends State<PaymentPage> {
           IconButton(
             onPressed: onRemove,
             icon: const Icon(Icons.delete_outline),
-            color: Colors.grey,
+            color: Color(0xFF1A1A1A),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
           ),
@@ -800,7 +803,7 @@ class _PaymentPageState extends State<PaymentPage> {
           Text(
             label,
             style: TextStyle(
-              color: isTotal ? Colors.black : Colors.grey[600],
+              color: isTotal ? Color(0xFF1A1A1A) : Color(0xFF1A1A1A),
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
               fontSize: isTotal ? 18 : 16,
             ),
@@ -808,7 +811,7 @@ class _PaymentPageState extends State<PaymentPage> {
           Text(
             value,
             style: TextStyle(
-              color: isTotal ? Colors.black : Colors.grey[600],
+              color: isTotal ? Color(0xFF1A1A1A) : Color(0xFF1A1A1A),
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
               fontSize: isTotal ? 18 : 16,
             ),
@@ -845,7 +848,7 @@ class _PaymentPageState extends State<PaymentPage> {
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? Colors.deepOrange : Colors.black,
+                color: isSelected ? Colors.deepOrange : Color(0xFF1A1A1A),
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
             ),
@@ -907,7 +910,7 @@ class _PaymentPageState extends State<PaymentPage> {
               _processOrder(context);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepOrange,
+              backgroundColor: Color(0xFFD32D43),
               foregroundColor: Colors.white,
             ),
             child: const Text('Confirm Order'),

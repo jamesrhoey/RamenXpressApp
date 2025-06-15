@@ -10,17 +10,17 @@ class OrderHistoryPage extends StatelessWidget {
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'pending':
-        return Colors.orange;
+        return const Color(0xFFD32D43); // Red
       case 'preparing':
-        return Colors.blue;
+        return const Color(0xFF1A1A1A); // Black
       case 'ready':
-        return Colors.green;
+        return const Color(0xFFD32D43); // Red
       case 'delivered':
-        return Colors.green;
+        return const Color(0xFF1A1A1A); // Black
       case 'cancelled':
-        return Colors.red;
+        return const Color(0xFFD32D43); // Red
       default:
-        return Colors.grey;
+        return const Color(0xFF1A1A1A); // Black
     }
   }
 
@@ -47,7 +47,7 @@ class OrderHistoryPage extends StatelessWidget {
                     const Text(
                       'Order History',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Color(0xFF1A1A1A),
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -79,7 +79,7 @@ class OrderHistoryPage extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                            color: Color(0xFF1A1A1A),
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -87,7 +87,7 @@ class OrderHistoryPage extends StatelessWidget {
                           'Your order history will appear here',
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.grey[600],
+                            color: Color(0xFF1A1A1A),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -107,7 +107,7 @@ class OrderHistoryPage extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Colors.grey[800],
+                              color: Color(0xFF1A1A1A),
                             ),
                           ),
                         ),
@@ -144,6 +144,7 @@ class OrderHistoryPage extends StatelessWidget {
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16,
+                                              color: Color(0xFF1A1A1A),
                                             ),
                                             overflow: TextOverflow.ellipsis,
                                           ),
@@ -154,8 +155,7 @@ class OrderHistoryPage extends StatelessWidget {
                                             vertical: 6,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: _getStatusColor(order['status'])
-                                                .withOpacity(0.1),
+                                            color: _getStatusColor(order['status']).withAlpha((0.08 * 255).toInt()),
                                             borderRadius: BorderRadius.circular(20),
                                           ),
                                           child: Text(
@@ -172,7 +172,7 @@ class OrderHistoryPage extends StatelessWidget {
                                     Text(
                                       dateFormat.format(order['date']),
                                       style: TextStyle(
-                                        color: Colors.grey[600],
+                                        color: Color(0xFF1A1A1A),
                                         fontSize: 14,
                                       ),
                                     ),
@@ -188,7 +188,7 @@ class OrderHistoryPage extends StatelessWidget {
                                               Text(
                                                 'Delivery: ${order['deliveryMethod']}',
                                                 style: TextStyle(
-                                                  color: Colors.grey[600],
+                                                  color: Color(0xFF1A1A1A),
                                                   fontSize: 12,
                                                 ),
                                                 overflow: TextOverflow.ellipsis,
@@ -197,7 +197,7 @@ class OrderHistoryPage extends StatelessWidget {
                                               Text(
                                                 'Payment: ${order['paymentMethod'].displayName}',
                                                 style: TextStyle(
-                                                  color: Colors.grey[600],
+                                                  color: Color(0xFF1A1A1A),
                                                   fontSize: 12,
                                                 ),
                                                 overflow: TextOverflow.ellipsis,
@@ -213,6 +213,7 @@ class OrderHistoryPage extends StatelessWidget {
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16,
+                                              color: Color(0xFF1A1A1A),
                                             ),
                                             textAlign: TextAlign.right,
                                             overflow: TextOverflow.ellipsis,
@@ -268,8 +269,8 @@ class OrderHistoryPage extends StatelessWidget {
             BottomNavigationBarItem(icon: Icon(Icons.history), label: ''),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
           ],
-          selectedItemColor: Colors.deepOrange,
-          unselectedItemColor: Colors.grey,
+          selectedItemColor: Color(0xFFD32D43),
+          unselectedItemColor: Color(0xFF1A1A1A),
           showSelectedLabels: false,
           showUnselectedLabels: false,
           backgroundColor: Colors.white,

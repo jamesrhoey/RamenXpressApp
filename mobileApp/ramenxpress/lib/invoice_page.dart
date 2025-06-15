@@ -11,43 +11,38 @@ class InvoicePage extends StatelessWidget {
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'pending':
-        return Colors.orange;
+        return const Color(0xFFD32D43); // Red
       case 'preparing':
-        return Colors.blue;
+        return const Color(0xFF1A1A1A); // Black
       case 'ready':
-        return Colors.green;
+        return const Color(0xFFD32D43); // Red
       case 'delivered':
-        return Colors.green;
+        return const Color(0xFF1A1A1A); // Black
       case 'cancelled':
-        return Colors.red;
+        return const Color(0xFFD32D43); // Red
       default:
-        return Colors.grey;
+        return const Color(0xFF1A1A1A); // Black
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final dateFormat = DateFormat('MMM dd, yyyy hh:mm a');
-    final currencyFormat = NumberFormat.currency(symbol: '₱', decimalDigits: 2);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Order Invoice'),
         backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        foregroundColor: Color(0xFF1A1A1A),
         elevation: 0,
         actions: [
           IconButton(
-            onPressed: () {
-              // TODO: Implement share functionality
-            },
-            icon: const Icon(Icons.share),
+            onPressed: () {},
+            icon: const Icon(Icons.share, color: Color(0xFF1A1A1A)),
           ),
           IconButton(
-            onPressed: () {
-              // TODO: Implement print functionality
-            },
-            icon: const Icon(Icons.print),
+            onPressed: () {},
+            icon: const Icon(Icons.print, color: Color(0xFF1A1A1A)),
           ),
         ],
       ),
@@ -60,7 +55,7 @@ class InvoicePage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: _getStatusColor(order['status']).withOpacity(0.1),
+                color: _getStatusColor(order['status']).withAlpha((0.08 * 255).toInt()),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: _getStatusColor(order['status']),
@@ -80,7 +75,7 @@ class InvoicePage extends StatelessWidget {
                         Text(
                           'Order Status',
                           style: TextStyle(
-                            color: Colors.grey[600],
+                            color: Color(0xFF1A1A1A),
                             fontSize: 14,
                           ),
                         ),
@@ -151,8 +146,9 @@ class InvoicePage extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.grey[50],
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Color(0xFFD32D43), width: 1),
                 ),
                 child: Row(
                   children: [
@@ -165,13 +161,14 @@ class InvoicePage extends StatelessWidget {
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
+                              color: Color(0xFF1A1A1A),
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             '₱${item['price'].toStringAsFixed(2)} × ${item['quantity']}',
                             style: TextStyle(
-                              color: Colors.grey[600],
+                              color: Color(0xFF1A1A1A),
                               fontSize: 14,
                             ),
                           ),
@@ -181,7 +178,7 @@ class InvoicePage extends StatelessWidget {
                               child: Text(
                                 'Add-ons: ${(item['addons'] as List).join(", ")}',
                                 style: TextStyle(
-                                  color: Colors.grey[600],
+                                  color: Color(0xFFD32D43),
                                   fontSize: 12,
                                 ),
                               ),
@@ -194,6 +191,7 @@ class InvoicePage extends StatelessWidget {
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
+                        color: Color(0xFF1A1A1A),
                       ),
                     ),
                   ],
@@ -214,7 +212,7 @@ class InvoicePage extends StatelessWidget {
             _buildSummaryRow('Subtotal', order['total'] - (order['deliveryMethod'] == 'Delivery' ? 50.0 : 0.0)),
             if (order['deliveryMethod'] == 'Delivery')
               _buildSummaryRow('Delivery Fee', 50.0),
-            const Divider(height: 32),
+            const Divider(height: 32, color: Color(0xFF1A1A1A)),
             _buildSummaryRow('Total', order['total'], isTotal: true),
             if (order['notes'] != null && order['notes'].toString().isNotEmpty) ...[
               const SizedBox(height: 24),
@@ -229,14 +227,14 @@ class InvoicePage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.grey[50],
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey[300]!),
+                  border: Border.all(color: Color(0xFFD32D43)),
                 ),
                 child: Text(
                   order['notes'],
                   style: TextStyle(
-                    color: Colors.grey[800],
+                    color: Color(0xFF1A1A1A),
                     fontSize: 16,
                   ),
                 ),
@@ -250,14 +248,15 @@ class InvoicePage extends StatelessWidget {
                   Navigator.pushReplacementNamed(context, '/order-history');
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepOrange,
+                  backgroundColor: Color(0xFFD32D43),
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 child: const Text(
-                  'View Order History',
+                  'Back to Order History',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -282,7 +281,7 @@ class InvoicePage extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                color: Colors.grey[600],
+                color: Color(0xFF1A1A1A),
                 fontSize: 14,
               ),
             ),
@@ -302,7 +301,6 @@ class InvoicePage extends StatelessWidget {
   }
 
   Widget _buildSummaryRow(String label, double value, {bool isTotal = false}) {
-    final currencyFormat = NumberFormat.currency(symbol: '₱', decimalDigits: 2);
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
@@ -311,15 +309,15 @@ class InvoicePage extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: isTotal ? Colors.black : Colors.grey[600],
+              color: isTotal ? Color(0xFF1A1A1A) : Color(0xFF1A1A1A),
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
               fontSize: isTotal ? 18 : 16,
             ),
           ),
           Text(
-            currencyFormat.format(value),
+            NumberFormat.currency(symbol: '₱', decimalDigits: 2).format(value),
             style: TextStyle(
-              color: isTotal ? Colors.black : Colors.grey[600],
+              color: isTotal ? Color(0xFF1A1A1A) : Color(0xFF1A1A1A),
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
               fontSize: isTotal ? 18 : 16,
             ),

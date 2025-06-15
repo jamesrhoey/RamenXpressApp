@@ -111,7 +111,7 @@ class _EditPaymentMethodPageState extends State<EditPaymentMethodPage> {
                   backgroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
                       if (states.contains(MaterialState.selected)) {
-                        return Colors.deepOrange.withOpacity(0.1);
+                        return Colors.deepOrange.withAlpha((0.08 * 255).toInt());
                       }
                       return Colors.grey[50]!;
                     },

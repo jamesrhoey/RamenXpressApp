@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withValues(red: 128, green: 128, blue: 128, alpha: 26),
+                      color: Color(0xFFD32D43).withAlpha((0.08 * 255).toInt()),
                       spreadRadius: 1,
                       blurRadius: 10,
                       offset: const Offset(0, 1),
@@ -120,13 +120,13 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
+                        color: Color(0xFF1A1A1A),
                       ),
                     ),
                     IconButton(
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(Icons.close),
-                      color: Colors.grey[600],
+                      color: Color(0xFF1A1A1A),
                     ),
                   ],
                 ),
@@ -141,8 +141,9 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.grey[50],
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Color(0xFFD32D43), width: 1),
                         ),
                         child: Row(
                           children: [
@@ -173,13 +174,14 @@ class _HomePageState extends State<HomePage> {
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
+                                      color: Color(0xFF1A1A1A),
                                     ),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
                                     '₱${totalPrice.toStringAsFixed(2)}',
                                     style: TextStyle(
-                                      color: Colors.grey[600],
+                                      color: Color(0xFF1A1A1A),
                                       fontSize: 14,
                                     ),
                                   ),
@@ -196,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey[800],
+                          color: Color(0xFF1A1A1A),
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -205,7 +207,7 @@ class _HomePageState extends State<HomePage> {
                         return Container(
                           margin: const EdgeInsets.only(bottom: 8),
                           decoration: BoxDecoration(
-                            color: Colors.grey[50],
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: CheckboxListTile(
@@ -226,16 +228,17 @@ class _HomePageState extends State<HomePage> {
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
+                                color: Color(0xFF1A1A1A),
                               ),
                             ),
                             subtitle: Text(
                               '₱${addOn['price'].toStringAsFixed(2)}',
                               style: TextStyle(
-                                color: Colors.grey[600],
+                                color: Color(0xFF1A1A1A),
                                 fontSize: 12,
                               ),
                             ),
-                            activeColor: Colors.deepOrange,
+                            activeColor: Color(0xFFD32D43),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -253,7 +256,7 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withValues(red: 128, green: 128, blue: 128, alpha: 26),
+                      color: Color(0xFFD32D43).withAlpha((0.08 * 255).toInt()),
                       spreadRadius: 1,
                       blurRadius: 10,
                       offset: const Offset(0, -1),
@@ -270,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             'Total Price',
                             style: TextStyle(
-                              color: Colors.grey[600],
+                              color: Color(0xFF1A1A1A),
                               fontSize: 12,
                             ),
                           ),
@@ -279,6 +282,7 @@ class _HomePageState extends State<HomePage> {
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
+                              color: Color(0xFF1A1A1A),
                             ),
                           ),
                         ],
@@ -303,7 +307,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.deepOrange,
+                        backgroundColor: Color(0xFFD32D43),
                         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -343,10 +347,10 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
                 child: Row(
                   children: [
-                    const Text(
+                    Text(
                       'RamenXpress',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Color(0xFF1A1A1A),
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -391,7 +395,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     CircleAvatar(
-                      backgroundImage: AssetImage('assets/adminPIC.png'),
+                      backgroundImage: AssetImage('assets/logo.png'),
                       radius: 20,
                     ),
                   ],
@@ -464,7 +468,7 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withValues(red: 128, green: 128, blue: 128, alpha: 26),
+              color: Color(0xFFD32D43).withAlpha((0.08 * 255).toInt()),
               spreadRadius: 1,
               blurRadius: 10,
               offset: const Offset(0, -1),
@@ -495,8 +499,8 @@ class _HomePageState extends State<HomePage> {
             BottomNavigationBarItem(icon: Icon(Icons.history), label: ''),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
           ],
-          selectedItemColor: Colors.deepOrange,
-          unselectedItemColor: Colors.grey,
+          selectedItemColor: Color(0xFFD32D43),
+          unselectedItemColor: Color(0xFF1A1A1A),
           showSelectedLabels: false,
           showUnselectedLabels: false,
           backgroundColor: Colors.white,
@@ -519,17 +523,17 @@ class _HomePageState extends State<HomePage> {
           });
         },
         backgroundColor: Colors.grey[100],
-        selectedColor: Colors.deepOrange.withValues(red: 255, green: 87, blue: 34, alpha: 51),
-        checkmarkColor: Colors.deepOrange,
+        selectedColor: Color(0xFFD32D43).withOpacity(0.1),
+        checkmarkColor: Color(0xFFD32D43),
         labelStyle: TextStyle(
-          color: isSelected ? Colors.deepOrange : Colors.black,
+          color: isSelected ? Color(0xFFD32D43) : Color(0xFF1A1A1A),
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(
-            color: isSelected ? Colors.deepOrange : Colors.grey[300]!,
+            color: isSelected ? Color(0xFFD32D43) : Colors.grey[300]!,
           ),
         ),
       ),
@@ -548,7 +552,7 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(red: 128, green: 128, blue: 128, alpha: 26),
+            color: Color(0xFFD32D43).withAlpha((0.08 * 255).toInt()),
             spreadRadius: 1,
             blurRadius: 10,
             offset: const Offset(0, 1),
@@ -578,6 +582,7 @@ class _HomePageState extends State<HomePage> {
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
+                    color: Color(0xFF1A1A1A),
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -586,7 +591,7 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   '₱${price.toStringAsFixed(2)}',
                   style: TextStyle(
-                    color: Colors.grey[600],
+                    color: Color(0xFF1A1A1A),
                     fontSize: 13,
                   ),
                 ),
@@ -595,7 +600,7 @@ class _HomePageState extends State<HomePage> {
                   width: double.infinity,
                   height: 32,
                   decoration: BoxDecoration(
-                    color: Colors.deepOrange,
+                    color: Color(0xFFD32D43),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: TextButton(

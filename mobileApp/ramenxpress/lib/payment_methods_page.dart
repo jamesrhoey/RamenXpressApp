@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/payment_methods_provider.dart';
-import 'models/payment_method.dart';
 import 'edit_payment_method_page.dart';
 
 class PaymentMethodsPage extends StatelessWidget {

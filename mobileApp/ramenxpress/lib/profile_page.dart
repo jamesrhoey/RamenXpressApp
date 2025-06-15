@@ -28,7 +28,7 @@ class ProfilePage extends StatelessWidget {
                     Text(
                       'Profile',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Color(0xFF1A1A1A),
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -82,7 +82,7 @@ class ProfilePage extends StatelessWidget {
                                   Text(
                                     profile.email,
                                     style: TextStyle(
-                                      color: Colors.grey.withValues(red: 128, green: 128, blue: 128, alpha: 51),
+                                      color: Color(0xFF1A1A1A),
                                       fontSize: 14,
                                     ),
                                   ),
@@ -97,14 +97,14 @@ class ProfilePage extends StatelessWidget {
                                       );
                                     },
                                     style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(color: Colors.deepOrange),
+                                      side: const BorderSide(color: Color(0xFFD32D43)),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
                                     child: const Text(
                                       'Edit Profile',
-                                      style: TextStyle(color: Colors.deepOrange),
+                                      style: TextStyle(color: Color(0xFFD32D43)),
                                     ),
                                   ),
                                 ],
@@ -236,7 +236,7 @@ class ProfilePage extends StatelessWidget {
                                 },
                                 child: const Text(
                                   'Logout',
-                                  style: TextStyle(color: Colors.red),
+                                  style: TextStyle(color: Color(0xFFD32D43)),
                                 ),
                               ),
                             ],
@@ -244,8 +244,8 @@ class ProfilePage extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red[50],
-                        foregroundColor: Colors.red,
+                        backgroundColor: Color(0xFFD32D43),
+                        foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -365,7 +365,7 @@ class ProfilePage extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: Colors.grey[600],
+              color: Color(0xFF1A1A1A),
               size: 24,
             ),
             const SizedBox(width: 16),
@@ -382,7 +382,7 @@ class ProfilePage extends StatelessWidget {
             else
               Icon(
                 Icons.chevron_right,
-                color: Colors.grey[400],
+                color: Color(0xFF1A1A1A),
               ),
           ],
         ),
