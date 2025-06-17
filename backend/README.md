@@ -117,18 +117,14 @@ npm start
 - **Body**:
 ```json
 {
-  "name": "Tonkotsu Ramen",
-  "price": 12.99,
+  "name": "test Ramen",
+  "price": 350,
   "category": "ramen",
+  "image": "imagesPATH",
   "ingredients": [
-    {
-      "inventoryItem": "Noodles",
-      "quantity": 200
-    },
-    {
-      "inventoryItem": "Broth",
-      "quantity": 500
-    }
+    { "inventoryItem": "Noodles", "quantity": 1 },
+    { "inventoryItem": "Chashu Pork", "quantity": 2 },
+    { "inventoryItem": "Ajitsuke Tamago", "quantity": 1 }
   ]
 }
 ```

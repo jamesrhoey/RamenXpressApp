@@ -15,6 +15,10 @@ const MenuSchema = new mongoose.Schema({
     enum: ['ramen', 'rice bowls', 'side dishes', 'sushi', 'party trays', 'add-ons', 'drinks'],
     required: true
   },
+  image: {
+    type: String,
+    required: true
+  },
   ingredients: [
     {
       inventoryItem: {

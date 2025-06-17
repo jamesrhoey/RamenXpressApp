@@ -1,28 +1,64 @@
-function handleLogin(event) {
+// API endpoint
+const API_URL = 'http://localhost:3000/api/v1';
+
+// Handle login form submission
+async function handleLogin(event) {
     event.preventDefault();
     
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
+    // Get form values
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
     const role = document.querySelector('input[name="role"]:checked').value;
+    
+    // Show error message element
     const errorMessage = document.getElementById('errorMessage');
-
-    if (!username || !password) {
-        errorMessage.textContent = 'Please enter both username and password.';
-        errorMessage.style.display = 'block';
-        return false;
-    }
-
     errorMessage.style.display = 'none';
+    
+    try {
+        // Make API request
+        const response = await fetch(`${API_URL}/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+            credentials: 'include' // Important for cookies
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Login failed');
+        }
+        
+        // Check if user role matches selected role
+        if (data.user.role !== role) {
+            throw new Error('Invalid role selected');
+        }
 
-    if (role === 'admin') {
-        window.location.href = './html/dashboard.html';
-        return false;
+        // Store the token in localStorage
+        if (data.token) {
+            localStorage.setItem('authToken', data.token);
+            // Also store user info
+            localStorage.setItem('userRole', data.user.role);
+            localStorage.setItem('username', data.user.username);
+        } else {
+            throw new Error('No authentication token received');
+        }
+        
+        // Redirect based on role
+        if (role === 'admin') {
+            window.location.href = './html/inventory.html';
+        } else {
+            window.location.href = './html/POS.html';
+        }
+        
+    } catch (error) {
+        console.error('Login error:', error);
+        errorMessage.textContent = error.message || 'Failed to connect to server';
+        errorMessage.style.display = 'block';
     }
-    // If cashier, do nothing for now
-    if (role === 'cashier') {
-        window.location.href = './html/POS.html';
-        return false;
-    }
+    
     return false;
 }
 
