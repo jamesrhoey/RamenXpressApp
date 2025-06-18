@@ -41,7 +41,7 @@ const mapper = '/api/v1';
 app.use(mapper + '/auth', AuthRoutes);
 app.use(mapper + '/inventory', verifyToken, isAdmin, InventoryRoutes);
 app.use(mapper + '/menu', verifyToken, isCashier, MenuRoutes);
-app.use(mapper + '/sales', verifyToken, isAdmin, SalesRoutes);
+app.use(mapper + '/sales', verifyToken, isCashier, SalesRoutes);
 app.use(mapper + '/upload', require('./routes/UploadRoutes'));
 
 mongoose.connect(MONGO_URI)

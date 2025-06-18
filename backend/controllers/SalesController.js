@@ -32,7 +32,7 @@ const placeOrder = async (req, res) => {
 
     // Process each item in the order
     for (const item of items) {
-      const { menuId, quantity = 1 } = item;
+      const { menuId, quantity = 1, addOns = [] } = item;
       const menuItem = await Menu.findById(menuId);
       
       if (!menuItem) {
@@ -69,8 +69,11 @@ const placeOrder = async (req, res) => {
         await inventoryItem.save();
       }
 
-      // Calculate item total
-      const itemTotal = menuItem.price * quantity;
+      // Calculate add-ons total
+      const addOnsTotal = addOns.reduce((sum, addon) => sum + addon.price, 0);
+      
+      // Calculate item total (base price + add-ons) * quantity
+      const itemTotal = (menuItem.price + addOnsTotal) * quantity;
       totalAmount += itemTotal;
 
       // Add to order items
@@ -78,7 +81,8 @@ const placeOrder = async (req, res) => {
         name: menuItem.name,
         price: menuItem.price,
         quantity,
-        total: itemTotal
+        total: itemTotal,
+        addOns: addOns
       });
     }
 
