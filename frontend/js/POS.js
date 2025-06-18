@@ -1,15 +1,65 @@
-// Menu Items Data
-const menuItems = [
-  { name: 'Tonkotsu Ramen', price: 210, image: 'Tramen.jpg', category: 'Ramen' },
-  { name: 'Tantanmen Ramen', price: 210, image: 'tantanmen.jpg', category: 'Ramen' },
-  { name: 'Karaage Ramen', price: 200, image: 'karaaageRamen.jpg', category: 'Ramen' },
-  { name: 'Chicken Karaage', price: 160, image: 'karaage-chicken.jpg', category: 'Side Dishes' },
-  { name: 'Chashu Don', price: 150, image: 'Chashu-Don-3.jpg', category: 'Rice Bowls' },
-  { name: 'Katsu Curry', price: 180, image: 'katsuCurry.jpg', category: 'Rice Bowls' },
-  { name: 'California Roll Sushi', price: 170, image: 'california.jpg', category: 'Side Dishes' },
-  { name: 'Gyoza', price: 80, image: 'gyoza.jpg', category: 'Side Dishes' },
-  { name: 'Tempura', price: 150, image: 'tempura.jpg', category: 'Side Dishes' },
-];
+// Global variables
+let menuItems = [];
+let cartItems = [];
+let selectedCategory = 'All';
+let searchQuery = '';
+let orderType = 'dine-in';
+let paymentMethod = 'cash';
+
+// API Base URL
+const API_BASE_URL = 'http://localhost:3000/api/v1';
+
+// Authentication utilities
+function getAuthToken() {
+    return localStorage.getItem('authToken');
+}
+
+function isAuthenticated() {
+    return !!getAuthToken();
+}
+
+function redirectToLogin() {
+    window.location.href = '../login.html';
+}
+
+// API request helper
+async function apiRequest(endpoint, options = {}) {
+    const token = getAuthToken();
+    
+    const defaultOptions = {
+        headers: {
+            'Content-Type': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` })
+        }
+    };
+
+    const config = {
+        ...defaultOptions,
+        ...options,
+        headers: {
+            ...defaultOptions.headers,
+            ...options.headers
+        }
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+        
+        if (response.status === 401) {
+            redirectToLogin();
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('API request failed:', error);
+        throw error;
+    }
+}
 
 // Ramen Add-ons
 const ramenAddOns = [
@@ -20,13 +70,6 @@ const ramenAddOns = [
   { name: 'Extra Seaweed', price: 15 },
   { name: 'Extra Green Onions', price: 10 },
 ];
-
-// State Variables
-let cartItems = [];
-let selectedCategory = 'All';
-let searchQuery = '';
-let orderType = 'Dine-in';
-let paymentMethod = 'Cash';
 
 // DOM Elements
 const menuItemsGrid = document.getElementById('menuItemsGrid');
@@ -40,11 +83,32 @@ const addToCartModal = new bootstrap.Modal(document.getElementById('addToCartMod
 const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
 
 // Initialize the page
-document.addEventListener('DOMContentLoaded', () => {
-  renderMenuItems();
-  setupEventListeners();
-  updateCart();
+document.addEventListener('DOMContentLoaded', async () => {
+    if (!isAuthenticated()) {
+        redirectToLogin();
+        return;
+    }
+
+    await loadMenuItems();
+    setupEventListeners();
+    updateCart();
 });
+
+// Load menu items from API
+async function loadMenuItems() {
+    try {
+        const response = await apiRequest('/menu/allmenu');
+        menuItems = response || [];
+        renderMenuItems();
+    } catch (error) {
+        console.error('Failed to load menu items:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load menu items. Please try again.'
+        });
+    }
+}
 
 // Setup Event Listeners
 function setupEventListeners() {
@@ -73,7 +137,13 @@ function setupEventListeners() {
     button.addEventListener('click', () => {
       orderTypeButtons.forEach(btn => btn.classList.remove('active'));
       button.classList.add('active');
-      orderType = button.dataset.orderType;
+      // Map frontend order types to backend values
+      const orderTypeMap = {
+        'Dine-in': 'dine-in',
+        'Takeout': 'takeout',
+        'Pickup': 'takeout'
+      };
+      orderType = orderTypeMap[button.dataset.orderType] || 'dine-in';
     });
   });
 
@@ -82,7 +152,13 @@ function setupEventListeners() {
     button.addEventListener('click', () => {
       paymentMethodButtons.forEach(btn => btn.classList.remove('active'));
       button.classList.add('active');
-      paymentMethod = button.dataset.payment;
+      // Map frontend payment methods to backend values
+      const paymentMap = {
+        'Cash': 'cash',
+        'GCash': 'gcash',
+        'Maya': 'paymaya'
+      };
+      paymentMethod = paymentMap[button.dataset.payment] || 'cash';
     });
   });
 
@@ -108,14 +184,6 @@ function setupEventListeners() {
   // Confirm Order Button
   document.getElementById('confirmOrderBtn').addEventListener('click', handlePaymentConfirm);
 
-  // Spice Level Buttons
-  document.querySelectorAll('[data-spice]').forEach(button => {
-    button.addEventListener('click', () => {
-      document.querySelectorAll('[data-spice]').forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-    });
-  });
-
   // Sidebar Toggle
   document.getElementById('sidebarToggle').addEventListener('click', () => {
     document.querySelector('.sidebar').classList.toggle('show');
@@ -126,18 +194,32 @@ function setupEventListeners() {
   });
 }
 
+// Format category for display
+function formatCategory(category) {
+    const categoryMap = {
+        'ramen': 'Ramen',
+        'rice bowls': 'Rice Bowls',
+        'side dishes': 'Side Dishes',
+        'sushi': 'Sushi',
+        'party trays': 'Party Trays',
+        'add-ons': 'Add-ons',
+        'drinks': 'Drinks'
+    };
+    return categoryMap[category] || category;
+}
+
 // Render Menu Items
 function renderMenuItems() {
   const filteredItems = menuItems.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchQuery);
-    const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'All' || formatCategory(item.category) === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   menuItemsGrid.innerHTML = filteredItems.map(item => `
     <div class="col-6 col-md-4 col-lg-3">
       <div class="card h-100" onclick="openAddToCartModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
-        <img src="../assets/${item.image}" class="card-img-top" alt="${item.name}">
+        <img src="${getImageUrl(item.image)}" class="card-img-top" alt="${item.name}" onerror="this.src='../assets/placeholder.jpg'">
         <div class="card-body p-2">
           <h6 class="card-title mb-1">${item.name}</h6>
           <p class="card-text text-danger fw-bold mb-0">PHP ${item.price.toFixed(2)}</p>
@@ -147,19 +229,45 @@ function renderMenuItems() {
   `).join('');
 }
 
+// Helper function to get correct image URL
+function getImageUrl(imagePath) {
+  if (!imagePath) {
+    return '../assets/placeholder.jpg';
+  }
+  
+  // If it's already a full URL, return as is
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
+  
+  // If it starts with /uploads/, it's a backend image
+  if (imagePath.startsWith('/uploads/')) {
+    return `http://localhost:3000${imagePath}`;
+  }
+  
+  // If it's a relative path, assume it's in assets
+  if (imagePath.startsWith('../') || imagePath.startsWith('./')) {
+    return imagePath;
+  }
+  
+  // Default to assets folder
+  return `../assets/${imagePath}`;
+}
+
 // Open Add to Cart Modal
 function openAddToCartModal(item) {
   document.getElementById('itemName').textContent = item.name;
   document.getElementById('itemPrice').textContent = `PHP ${item.price.toFixed(2)}`;
-  document.getElementById('itemImage').src = `../assets/${item.image}`;
+  document.getElementById('itemImage').src = getImageUrl(item.image);
+  document.getElementById('itemImage').onerror = function() {
+    this.src = '../assets/placeholder.jpg';
+  };
   document.getElementById('quantity').value = 1;
 
-  const spiceLevelSection = document.getElementById('spiceLevelSection');
   const addOnsSection = document.getElementById('addOnsSection');
   const addOnsGrid = document.getElementById('addOnsGrid');
 
-  if (item.category === 'Ramen') {
-    spiceLevelSection.classList.remove('d-none');
+  if (item.category === 'ramen') {
     addOnsSection.classList.remove('d-none');
     addOnsGrid.innerHTML = ramenAddOns.map(addon => `
       <div class="col-6">
@@ -172,7 +280,6 @@ function openAddToCartModal(item) {
       </div>
     `).join('');
   } else {
-    spiceLevelSection.classList.add('d-none');
     addOnsSection.classList.add('d-none');
   }
 
@@ -191,7 +298,7 @@ function handleAddToCart() {
   const quantity = parseInt(document.getElementById('quantity').value);
   
   let addOns = [];
-  if (item.category === 'Ramen') {
+  if (item.category === 'ramen') {
     const selectedAddOns = document.querySelectorAll('#addOnsGrid .card.selected');
     addOns = Array.from(selectedAddOns).map(card => {
       const name = card.querySelector('span:first-child').textContent;
@@ -200,7 +307,6 @@ function handleAddToCart() {
     });
   }
 
-  const spiceLevel = document.querySelector('#spiceLevelSection .btn.active')?.dataset.spice || 'Mild';
   const addOnsTotal = addOns.reduce((sum, addon) => sum + addon.price, 0);
   const total = (item.price + addOnsTotal) * quantity;
 
@@ -208,7 +314,6 @@ function handleAddToCart() {
     ...item,
     quantity,
     addOns,
-    spiceLevel,
     total
   });
 
@@ -227,7 +332,6 @@ function updateCart() {
           <div>
             <h6 class="mb-1">${item.name}</h6>
             <p class="text-muted small mb-1">Qty: ${item.quantity}</p>
-            ${item.spiceLevel ? `<p class="text-muted small mb-1">Spice: ${item.spiceLevel}</p>` : ''}
             ${item.addOns.length > 0 ? `
               <p class="text-muted small mb-0">Add-ons: ${item.addOns.map(addon => addon.name).join(', ')}</p>
             ` : ''}
@@ -265,34 +369,63 @@ function handleCheckout() {
     return;
   }
 
-  const orderTypeIcon = document.querySelector(`[data-order-type="${orderType}"] i`).className;
-  const paymentMethodIcon = document.querySelector(`[data-payment="${paymentMethod}"] i`).className;
+  const orderTypeIcon = document.querySelector(`[data-order-type="${orderType === 'dine-in' ? 'Dine-in' : 'Takeout'}"] i`).className;
+  const paymentMethodIcon = document.querySelector(`[data-payment="${paymentMethod === 'cash' ? 'Cash' : paymentMethod === 'gcash' ? 'GCash' : 'Maya'}"] i`).className;
   const total = cartItems.reduce((sum, item) => sum + item.total, 0);
 
   document.getElementById('orderTypeIcon').className = orderTypeIcon;
-  document.getElementById('orderTypeText').textContent = orderType;
+  document.getElementById('orderTypeText').textContent = orderType === 'dine-in' ? 'Dine-in' : 'Takeout';
   document.getElementById('paymentMethodIcon').className = paymentMethodIcon;
-  document.getElementById('paymentMethodText').textContent = paymentMethod;
+  document.getElementById('paymentMethodText').textContent = paymentMethod === 'cash' ? 'Cash' : paymentMethod === 'gcash' ? 'GCash' : 'Maya';
   document.getElementById('paymentTotal').textContent = `PHP ${total.toFixed(2)}`;
 
   paymentModal.show();
 }
 
 // Handle Payment Confirm
-function handlePaymentConfirm() {
-  Swal.fire({
-    title: 'Order Completed!',
-    icon: 'success',
-    confirmButtonText: 'OK',
-    confirmButtonColor: '#dc3545',
-    customClass: {
-      popup: 'rounded-lg',
-      title: 'text-xl font-bold',
-      confirmButton: 'rounded-lg'
-    }
-  }).then(() => {
-    cartItems = [];
-    updateCart();
-    paymentModal.hide();
-  });
-} 
+async function handlePaymentConfirm() {
+  try {
+    // Prepare order data for API
+    const orderData = {
+      items: cartItems.map(item => ({
+        menuId: item._id,
+        quantity: item.quantity,
+        addOns: item.addOns || []
+      })),
+      orderType: orderType,
+      paymentMethod: paymentMethod
+    };
+
+    // Send order to backend
+    const response = await apiRequest('/sales/order', {
+      method: 'POST',
+      body: JSON.stringify(orderData)
+    });
+
+    Swal.fire({
+      title: 'Order Completed!',
+      text: `Order ID: ${response.orderDetails.orderId}`,
+      icon: 'success',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#dc3545',
+      customClass: {
+        popup: 'rounded-lg',
+        title: 'text-xl font-bold',
+        confirmButton: 'rounded-lg'
+      }
+    }).then(() => {
+      cartItems = [];
+      updateCart();
+      paymentModal.hide();
+    });
+
+  } catch (error) {
+    console.error('Error processing order:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Order Failed',
+      text: 'Failed to process order. Please try again.',
+      confirmButtonColor: '#dc3545'
+    });
+  }
+}

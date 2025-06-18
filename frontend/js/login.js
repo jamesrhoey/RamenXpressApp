@@ -48,7 +48,7 @@ async function handleLogin(event) {
         
         // Redirect based on role
         if (role === 'admin') {
-            window.location.href = './html/inventory.html';
+            window.location.href = './html/dashboard.html';
         } else {
             window.location.href = './html/POS.html';
         }

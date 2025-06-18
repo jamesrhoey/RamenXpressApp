@@ -46,6 +46,7 @@ app.use(mapper + '/menu', verifyToken, isCashier, MenuRoutes);
 app.use(mapper + '/menu-items', MenuItemRoutes);
 app.use(mapper + '/sales', verifyToken, isAdmin, SalesRoutes);
 app.use(mapper + '/orders', OrderRoutes);
+
 app.use(mapper + '/upload', require('./routes/UploadRoutes'));
 
 mongoose.connect(MONGO_URI)
